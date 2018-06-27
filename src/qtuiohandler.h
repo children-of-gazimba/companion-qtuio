@@ -1,5 +1,5 @@
-#ifndef TUIO_HANDLER_H
-#define TUIO_HANDLER_H
+#ifndef QQTuioHandler_H
+#define QQTuioHandler_H
 
 #include <QObject>
 #include <QMap>
@@ -11,19 +11,14 @@
 #include "qoscbundle_p.h"
 #include "qoscmessage_p.h"
 #include "udp_client.h"
-#include "models/tuio_cursor_table_model.h"
-#include "models/tuio_token_table_model.h"
 
-class TuioHandler : public QObject
+class QTuioHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit TuioHandler(QObject *parent = nullptr);
-    explicit TuioHandler(const QHostAddress& ip, unsigned port, QObject *parent = nullptr);
-    virtual ~TuioHandler();
-
-    TuioCursorTableModel* getCursorModel() const;
-    TuioTokenTableModel* getTokenModel() const;
+    explicit QTuioHandler(QObject *parent = nullptr);
+    explicit QTuioHandler(const QHostAddress& ip, unsigned port, QObject *parent = nullptr);
+    virtual ~QTuioHandler();
 
 signals:
     void cursorEvent(const QMap<int, QTuioCursor>& active_cursors,
@@ -44,16 +39,12 @@ public slots:
     void process2DObjFseq(const QOscMessage &message);
 
 protected:
-    void initModels();
 
     UdpClient *client_;
     QMap<int, QTuioCursor> active_cursors_;
     QVector<QTuioCursor> dead_cursors_;
     QMap<int, QTuioToken> active_tokens_;
     QVector<QTuioToken> dead_tokens_;
-
-    TuioCursorTableModel* cursor_model_;
-    TuioTokenTableModel* token_model_;
 };
 
-#endif // TUIO_HANDLER_H
+#endif // QQTuioHandler_H

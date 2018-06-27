@@ -1,4 +1,4 @@
-#include "tuio_handler.h"
+#include "qQTuioHandler.h"
 
 #include <QHostAddress>
 
@@ -7,7 +7,7 @@
 #include "qoscbundle_p.h"
 #include "qoscmessage_p.h"
 
-TuioHandler::TuioHandler(QObject *parent)
+QTuioHandler::QTuioHandler(QObject *parent)
     : QObject(parent)
     , client_(0)
     , active_cursors_()
@@ -18,10 +18,10 @@ TuioHandler::TuioHandler(QObject *parent)
     client_ = new UdpClient(3333, QHostAddress::LocalHost);
 
     connect(client_, &UdpClient::messageReceived,
-            this, &TuioHandler::processPackets);
+            this, &QTuioHandler::processPackets);
 }
 
-TuioHandler::TuioHandler(const QHostAddress &ip, unsigned port, QObject *parent)
+QTuioHandler::QTuioHandler(const QHostAddress &ip, unsigned port, QObject *parent)
     : QObject(parent)
     , client_(0)
     , active_cursors_()
@@ -32,23 +32,13 @@ TuioHandler::TuioHandler(const QHostAddress &ip, unsigned port, QObject *parent)
     client_ = new UdpClient(port, ip);
 
     connect(client_, &UdpClient::messageReceived,
-            this, &TuioHandler::processPackets);
+            this, &QTuioHandler::processPackets);
 }
 
-TuioHandler::~TuioHandler()
+QTuioHandler::~QTuioHandler()
 {}
 
-TuioCursorTableModel *TuioHandler::getCursorModel() const
-{
-    return cursor_model_;
-}
-
-TuioTokenTableModel *TuioHandler::getTokenModel() const
-{
-    return token_model_;
-}
-
-void TuioHandler::processPackets(const QByteArray& datagram, const QHostAddress& sender, unsigned sender_port)
+void QTuioHandler::processPackets(const QByteArray& datagram, const QHostAddress& sender, unsigned sender_port)
 {
     Q_UNUSED(sender);
     Q_UNUSED(sender_port);
@@ -122,7 +112,7 @@ void TuioHandler::processPackets(const QByteArray& datagram, const QHostAddress&
     }
 }
 
-void TuioHandler::process2DCurSource(const QOscMessage &message)
+void QTuioHandler::process2DCurSource(const QOscMessage &message)
 {
     QList<QVariant> arguments = message.arguments();
     if (arguments.count() != 2) {
@@ -139,7 +129,7 @@ void TuioHandler::process2DCurSource(const QOscMessage &message)
 //    qDebug() << "  >" << "Got TUIO source message from: " << arguments.at(1).toByteArray();
 }
 
-void TuioHandler::process2DCurAlive(const QOscMessage &message)
+void QTuioHandler::process2DCurAlive(const QOscMessage &message)
 {
     QList<QVariant> arguments = message.arguments();
 
@@ -190,7 +180,7 @@ void TuioHandler::process2DCurAlive(const QOscMessage &message)
     active_cursors_ = new_active_cursors;
 }
 
-void TuioHandler::process2DCurSet(const QOscMessage &message)
+void QTuioHandler::process2DCurSet(const QOscMessage &message)
 {
     QList<QVariant> arguments = message.arguments();
     if (arguments.count() < 7) {
@@ -234,14 +224,14 @@ void TuioHandler::process2DCurSet(const QOscMessage &message)
 }
 
 
-void TuioHandler::process2DCurFseq(const QOscMessage &message)
+void QTuioHandler::process2DCurFseq(const QOscMessage &message)
 {
     Q_UNUSED(message);
     emit cursorEvent(active_cursors_, dead_cursors_);
     dead_cursors_.clear();
 }
 
-void TuioHandler::process2DObjSource(const QOscMessage &message)
+void QTuioHandler::process2DObjSource(const QOscMessage &message)
 {
     QList<QVariant> arguments = message.arguments();
     if (arguments.count() != 2) {
@@ -255,7 +245,7 @@ void TuioHandler::process2DObjSource(const QOscMessage &message)
     }
 }
 
-void TuioHandler::process2DObjAlive(const QOscMessage &message)
+void QTuioHandler::process2DObjAlive(const QOscMessage &message)
 {
     QList<QVariant> arguments = message.arguments();
 
@@ -306,7 +296,7 @@ void TuioHandler::process2DObjAlive(const QOscMessage &message)
     active_tokens_ = new_active_tokens;
 }
 
-void TuioHandler::process2DObjSet(const QOscMessage &message)
+void QTuioHandler::process2DObjSet(const QOscMessage &message)
 {
     QList<QVariant> arguments = message.arguments();
     if (arguments.count() < 7) {
@@ -357,7 +347,7 @@ void TuioHandler::process2DObjSet(const QOscMessage &message)
     tok.setAngularAcceleration(angular_acceleration);
 }
 
-void TuioHandler::process2DObjFseq(const QOscMessage &message)
+void QTuioHandler::process2DObjFseq(const QOscMessage &message)
 {
     Q_UNUSED(message);
 
