@@ -13,7 +13,9 @@ HEADERS += $$PWD/qoscbundle_p.h \
            $$PWD/qoscmessage_p.h \
            $$PWD/qtuio_p.h \
            $$PWD/qtuiocursor_p.h \
-           $$PWD/qtuiotoken_p.h
+           $$PWD/qtuiotoken_p.h \
+           $$PWD/tuio_handler.h
            
 SOURCES += $$PWD/qoscbundle.cpp \
-           $$PWD/qoscmessage.cpp
+           $$PWD/qoscmessage.cpp \
+           $$PWD/tuio_handler.cpp
